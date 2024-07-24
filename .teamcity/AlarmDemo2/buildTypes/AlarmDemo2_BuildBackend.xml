@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<build-type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="e9955de0-8bb0-4cbd-9b67-29a257c3e24f" xsi:noNamespaceSchemaLocation="https://www.jetbrains.com/teamcity/schemas/2021.1/project-config.xsd">
+  <name>Build Backend</name>
+  <description />
+  <settings>
+    <options>
+      <option name="artifactRules" value="build/libs/*" />
+    </options>
+    <disabled-settings>
+      <setting-ref ref="RUNNER_4" />
+      <setting-ref ref="TRIGGER_6" />
+    </disabled-settings>
+    <parameters />
+    <build-runners>
+      <runner id="RUNNER_3" name="" type="gradle-runner">
+        <parameters>
+          <param name="teamcity.step.mode" value="default" />
+          <param name="ui.gradleRunner.additional.gradle.cmd.params" value="-x test" />
+          <param name="ui.gradleRunner.gradle.tasks.names" value="build" />
+          <param name="ui.gradleRunner.gradle.wrapper.useWrapper" value="true" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_4" name="" type="Qodana">
+        <parameters>
+          <param name="arguments-command-docker" value="-e QODANA_REVISION=&quot;%build.vcs.number%&quot; -e QODANA_REMOTE_URL=&quot;%vcsroot.url%&quot; -e QODANA_BRANCH=&quot;%vcsroot.branch%%&quot;" />
+          <param name="code-inspection-profile-name" value="qodana.recommended" />
+          <param name="code-inspection-xml-config" value="Default" />
+          <param name="linterVersion" value="latest" />
+          <param name="namesAndTags" value="public-image-qodana-jvm" />
+          <param name="namesAndTagsCustom" value="jetbrains/qodana" />
+          <param name="secure:cloud-token" value="credentialsJSON:98b80096-d5bb-41ca-9000-06f287466a77" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+    </build-runners>
+    <vcs-settings>
+      <vcs-entry-ref root-id="AlarmDemo2_HttpsGithubComAlekseiKoniakinAlarmDemoRefsHeadsMain">
+        <checkout-rule rule="+:alarm-management =&gt; ." />
+      </vcs-entry-ref>
+    </vcs-settings>
+    <requirements />
+    <build-triggers>
+      <build-trigger id="TRIGGER_6" type="vcsTrigger">
+        <parameters>
+          <param name="branchFilter" value="+:*" />
+          <param name="enableQueueOptimization" value="true" />
+          <param name="quietPeriodMode" value="DO_NOT_USE" />
+        </parameters>
+      </build-trigger>
+    </build-triggers>
+    <dependencies>
+      <depend-on sourceBuildTypeId="AlarmDemo2_RunBackendTests">
+        <options>
+          <option name="run-build-if-dependency-failed" value="CANCEL" />
+          <option name="take-started-build-with-same-revisions" value="true" />
+          <option name="take-successful-builds-only" value="true" />
+        </options>
+      </depend-on>
+    </dependencies>
+    <cleanup />
+  </settings>
+</build-type>
+

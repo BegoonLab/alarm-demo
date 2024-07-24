@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<build-type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="53739457-7f49-43e0-9999-a7552f4a9e24" xsi:noNamespaceSchemaLocation="https://www.jetbrains.com/teamcity/schemas/2021.1/project-config.xsd">
+  <name>Build Frontend</name>
+  <description />
+  <settings>
+    <options>
+      <option name="artifactRules" value="alarm-frontend/build/**/* =&gt; build-frontend.zip" />
+    </options>
+    <parameters />
+    <build-runners>
+      <runner id="RUNNER_21" name="" type="nodejs-runner">
+        <parameters>
+          <param name="plugin.docker.imageId" value="node:lts" />
+          <param name="plugin.docker.imagePlatform" value="linux" />
+          <param name="shellScript"><![CDATA[export CYPRESS_CACHE_FOLDER=/app-alarm/.cache
+mkdir -p /app-alarm/.cache
+chmod -R 777 /app-alarm
+chown -R node:node /app-alarm
+npm ci
+npm run build]]></param>
+          <param name="teamcity.build.workingDir" value="alarm-frontend" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_25" name="" type="simpleRunner">
+        <parameters>
+          <param name="script.content" value="ls -al" />
+          <param name="teamcity.step.mode" value="default" />
+          <param name="use.custom.script" value="true" />
+        </parameters>
+      </runner>
+    </build-runners>
+    <vcs-settings>
+      <vcs-entry-ref root-id="AlarmDemo2_HttpsGithubComAlekseiKoniakinAlarmDemoRefsHeadsMain">
+        <checkout-rule rule="+:alarm-frontend =&gt; ." />
+      </vcs-entry-ref>
+    </vcs-settings>
+    <requirements />
+    <build-triggers />
+    <cleanup />
+  </settings>
+</build-type>
+
