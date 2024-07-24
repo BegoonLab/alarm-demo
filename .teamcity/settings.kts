@@ -207,18 +207,6 @@ object BuildFrontend : BuildType({
         script {
             scriptContent = "ls -al"
         }
-    }
-
-    features {
-        buildCache {
-            use = false
-            publish = false
-            publishOnlyChanged = false
-            rules = "node_modules"
-            param("publish-cache-name", "npm_cache")
-            param("use-cache-name", "npm_cache")
-        }
-    }
 })
 
 object BuildFrontendDockerImage : BuildType({
